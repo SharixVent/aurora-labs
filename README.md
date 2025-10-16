@@ -3,7 +3,7 @@
 Elegancki, lekki i w pełni statyczny blog prezentujący markę **Aurora Labs** – inteligentne produkty solarne + nacisk na czysty design i mikrointerakcje.  
 Projekt bez bundlera, działa od razu po otwarciu pliku `index.html`.
 
-<img width="896" height="608" alt="ss-1" src="https://github.com/user-attachments/assets/4ac72fba-976c-4d50-a2e8-a7ad32b021c4" />
+<img width="896" height="608" alt="ss-1" src="https://github.com/user-attachments/assets/deb97dc5-c212-4c76-ae57-b3bb60654ca6" />
 
 ---
 
