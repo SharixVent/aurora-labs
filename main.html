@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Aurora Labs — Blog o energii słonecznej i dobrym designie</title>
+	<meta name="description"
+		content="Blog firmy Aurora Labs — inteligentne, piękne produkty solarne. Porady, inspiracje, nowości." />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;800&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css">
+
+	<style>
+		:root {
+			--h-radius: 16px;
+			--shadow-1: 0 10px 25px rgba(18, 24, 49, 0.12);
+			--shadow-2: 0 18px 40px rgba(18, 24, 49, 0.18);
+			--bg: #ffffff;
+			--surface: #ffffff;
+			--surface-alt: #f6f8fb;
+			--text: #0e1222;
+			--muted: #505b7c;
+			--primary: #6c5ce7;
+			--secondary: #00d1b2;
+			--accent: #ff7a59;
+			--ring: rgba(108, 92, 231, 0.35);
+			--ok: #22c55e;
+			--warn: #f59e0b;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			:root {
+				--bg: #0b1020;
+				--surface: #121831;
+				--surface-alt: #0f152b;
+				--text: #eef2ff;
+				--muted: #aab3d6;
+				--ring: rgba(99, 102, 241, 0.35);
+			}
+		}
+
+		:root.is-light {
+			--bg: #ffffff;
+			--surface: #ffffff;
+			--surface-alt: #f6f8fb;
+			--text: #0e1222;
+			--muted: #505b7c;
+		}
+
+		:root.is-dark {
+			--bg: #0b1020;
+			--surface: #121831;
+			--surface-alt: #0f152b;
+			--text: #eef2ff;
+			--muted: #aab3d6;
+			--ring: rgba(99, 102, 241, 0.35);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			height: 100%;
+		}
+
+		body {
+			overflow-x: hidden;
+			margin: 0;
+			font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+			color: var(--text);
+			background: linear-gradient(180deg, var(--surface-alt), var(--bg) 180px) fixed;
+			line-height: 1.6;
+			letter-spacing: 0.2px;
+			transition: background .25s, color .25s;
+		}
+
+		.topbar {
+			position: sticky;
+			top: 0;
+			z-index: 50;
+			backdrop-filter: saturate(120%) blur(10px);
+			background: color-mix(in oklab, var(--surface) 70%, transparent);
+			border-bottom: 1px solid color-mix(in oklab, var(--muted) 15%, transparent);
+		}
+
+		.container {
+			max-width: 1100px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+
+		.nav {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+			justify-content: space-between;
+			padding: 14px 0;
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			text-decoration: none;
+		}
+
+		.logo {
+			width: 36px;
+			height: 36px;
+			border-radius: 10px;
+			display: grid;
+			place-items: center;
+			color: white;
+			background: conic-gradient(from 210deg at 50% 50%, var(--primary), var(--secondary), var(--accent), var(--primary));
+			box-shadow: var(--shadow-1);
+			font-family: Manrope, Inter, sans-serif;
+			font-weight: 800;
+			letter-spacing: .5px;
+		}
+
+		.brand h1 {
+			font: 800 18px/1 Manrope, Inter, sans-serif;
+			margin: 0;
+			color: var(--text);
+		}
+
+		.nav-right {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.btn {
+			cursor: pointer;
+			border: 0;
+			border-radius: 999px;
+			padding: 10px 14px;
+			font-weight: 600;
+		}
+
+		.btn-primary {
+			background: var(--primary);
+			color: white;
+			box-shadow: var(--shadow-1);
+		}
+
+		.btn-ghost {
+			background: transparent;
+			color: var(--text);
+		}
+
+		#themeToggle i {
+			font-size: 18px;
+			color: var(--text);
+			transition: transform .3s, color .3s;
+		}
+
+		#themeToggle:hover i {
+			transform: rotate(15deg) scale(1.1);
+			color: var(--primary);
+		}
+
+		.palette {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 8px;
+			border-radius: 999px;
+			background: color-mix(in oklab, var(--surface) 80%, transparent);
+			border: 1px solid color-mix(in oklab, var(--muted) 15%, transparent);
+		}
+
+		.swatch {
+			width: 26px;
+			height: 26px;
+			border-radius: 50%;
+			border: 2px solid transparent;
+			cursor: pointer;
+		}
+
+		.swatch.active {
+			border-color: var(--text);
+			transform: scale(1.08);
+		}
+
+		.progress {
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 3px;
+			width: 0;
+			background: linear-gradient(90deg, var(--primary), var(--secondary));
+			z-index: 60;
+			box-shadow: 0 0 10px var(--ring);
+		}
+
+		.hero {
+			padding: 56px 0 28px;
+		}
+
+		.hero-grid {
+			display: grid;
+			grid-template-columns: 1.2fr 0.8fr;
+			gap: 24px;
+			align-items: center;
+		}
+
+		.hero-card {
+			background:
+				radial-gradient(1100px 400px at 0% 0%, color-mix(in oklab, var(--primary) 12%, transparent), transparent),
+				radial-gradient(1000px 500px at 100% 120%, color-mix(in oklab, var(--secondary) 10%, transparent), transparent),
+				var(--surface);
+			border: 1px solid color-mix(in oklab, var(--muted) 15%, transparent);
+			border-radius: 22px;
+			padding: 26px;
+			box-shadow: var(--shadow-2);
+			transition: background .25s, border-color .25s;
+		}
+
+		.hero h2 {
+			font: 800 36px/1.2 Manrope, Inter, sans-serif;
+			margin: 0 0 14px;
+		}
+
+		.hero p {
+			margin: 0 0 18px;
+			color: var(--muted);
+		}
+
+		.hero .cta {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.stat {
+			display: grid;
+			grid-template-columns: auto 1fr;
+			gap: 8px 14px;
+			align-items: center;
+			margin-top: 16px;
+		}
+
+		.stat .dot {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: var(--secondary);
+			box-shadow: 0 0 0 7px color-mix(in oklab, var(--secondary) 20%, transparent);
+		}
+
+		.stat strong {
+			font-weight: 700;
+		}
+
+		.glass {
+			background: linear-gradient(180deg, color-mix(in oklab, var(--surface) 80%, transparent), color-mix(in oklab, var(--surface) 60%, transparent));
+			border: 1px solid color-mix(in oklab, var(--muted) 15%, transparent);
+			border-radius: 20px;
+			padding: 18px;
+			box-shadow: var(--shadow-1);
+			width: 100%;
+			max-width: 100%;
+			overflow: hidden;
+			box-sizing: border-box;
+		}
+
+		.content {
+			display: grid;
+			grid-template-columns: 1.8fr 1fr;
+			gap: 22px;
+			padding: 18px 0 60px;
+		}
+
+		.posts {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 18px;
+		}
+
+		.card {
+			background: var(--surface);
+			border: 1px solid color-mix(in oklab, var(--muted) 15%, transparent);
+			border-radius: 18px;
+			overflow: clip;
+			box-shadow: var(--shadow-1);
+			display: flex;
+			flex-direction: column;
+			transition: background .25s, border-color .25s;
+		}
+
+		.cover {
+			aspect-ratio: 16/9;
+			background: linear-gradient(135deg, var(--primary), var(--secondary));
+			position: relative;
+		}
+
+		.tag {
+			position: absolute;
+			left: 12px;
+			top: 12px;
+			background: color-mix(in oklab, var(--bg) 90%, var(--primary));
+			color: var(--text);
+			padding: 6px 10px;
+			border-radius: 999px;
+			font-weight: 700;
+			font-size: 12px;
+			letter-spacing: .3px;
+		}
+
+		.card .body {
+			padding: 16px;
+			display: grid;
+			gap: 10px;
+		}
+
+		.title {
+			font: 700 18px/1.35 Inter, sans-serif;
+			margin: 0;
+		}
+
+		.meta {
+			font-size: 13px;
+			color: var(--muted);
+		}
+
+		.actions {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 6px;
+		}
+
+		.chip {
+			font-size: 12px;
+			padding: 6px 10px;
+			border-radius: 999px;
+			background: var(--surface-alt);
+			border: 1px solid color-mix(in oklab, var(--muted) 18%, transparent);
+		}
+
+		.sidebar {
+			display: grid;
+			gap: 18px;
+		}
+
+		.widget h3 {
+			margin: 0 0 10px;
+			font: 800 16px/1.2 Manrope, Inter, sans-serif;
+		}
+
+		.search {
+			position: relative;
+		}
+
+		.search input {
+			width: 100%;
+			padding: 12px 40px 12px 12px;
+			border-radius: 12px;
+			border: 1px solid color-mix(in oklab, var(--muted) 18%, transparent);
+			background: var(--surface);
+			color: var(--text);
+			outline: none;
+			box-shadow: inset 0 1px 0 rgba(0, 0, 0, .02);
+		}
+
+		.search svg {
+			position: absolute;
+			right: 10px;
+			top: 50%;
+			transform: translateY(-50%);
+			opacity: .6;
+		}
+
+		.tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+		}
+
+		.tags button {
+			border: 0;
+			padding: 8px 12px;
+			border-radius: 999px;
+			background: var(--surface);
+			border: 1px solid color-mix(in oklab, var(--muted) 18%, transparent);
+			cursor: pointer;
+		}
+
+		.tags button[aria-pressed="true"] {
+			background: color-mix(in oklab, var(--primary) 18%, var(--surface));
+			border-color: color-mix(in oklab, var(--primary) 35%, var(--surface));
+		}
+
+		footer {
+			padding: 28px 0 60px;
+			color: var(--muted);
+			text-align: center;
+			font-family: Inter, sans-serif;
+			font-size: 15px;
+		}
+
+		footer a {
+			color: var(--muted);
+			text-decoration: none;
+			font-weight: 500;
+			margin: 0 10px;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			transition: color .2s;
+		}
+
+		footer a:hover {
+			color: var(--primary);
+		}
+
+		footer i {
+			font-size: 18px;
+		}
+
+		.marquee {
+			display: flex;
+			overflow: hidden;
+			width: 100%;
+			max-width: 100%;
+			mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+			-webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+			border: 1px dashed color-mix(in oklab, var(--muted) 30%, transparent);
+			border-radius: 14px;
+			padding: 10px;
+			gap: 20px;
+			align-items: center;
+			background: var(--surface);
+			box-sizing: border-box;
+		}
+
+		.marquee .flow {
+			display: flex;
+			gap: 24px;
+			animation: slide 30s linear infinite;
+			white-space: nowrap;
+			width: max-content;
+		}
+
+		.badge {
+			padding: 6px 10px;
+			border-radius: 999px;
+			background: color-mix(in oklab, var(--surface-alt) 70%, transparent);
+			border: 1px solid color-mix(in oklab, var(--muted) 18%, transparent);
+			font-weight: 600;
+		}
+
+		@keyframes slide {
+			from {
+				transform: translateX(0);
+			}
+
+			to {
+				transform: translateX(-50%);
+			}
+		}
+
+		.reveal {
+			opacity: 0;
+			transform: translateY(8px);
+			transition: .6s ease;
+		}
+
+		.reveal.in {
+			opacity: 1;
+			transform: none;
+		}
+
+		.to-top {
+			position: fixed;
+			right: 16px;
+			bottom: 16px;
+			width: 44px;
+			height: 44px;
+			border-radius: 12px;
+			display: grid;
+			place-items: center;
+			background: var(--primary);
+			color: #fff;
+			border: 0;
+			box-shadow: var(--shadow-2);
+			opacity: 0;
+			transform: translateY(10px);
+			transition: .2s;
+			cursor: pointer;
+		}
+
+		.to-top.show {
+			opacity: 1;
+			transform: none;
+		}
+
+		@media (max-width: 960px) {
+			.content {
+				grid-template-columns: 1fr;
+			}
+
+			.posts {
+				grid-template-columns: 1fr;
+			}
+
+			.hero-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.nav .btn-primary {
+				display: none;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="progress" id="progress"></div>
+
+	<header class="topbar">
+		<div class="container nav">
+			<a class="brand" href="#">
+				<div class="logo">A</div>
+				<h1>Aurora Labs</h1>
+			</a>
+			<div class="nav-right">
+				<div class="palette" id="palette">
+					<button class="swatch" style="background:#6c5ce7" data-primary="#6c5ce7" data-secondary="#00d1b2"
+						data-accent="#ff7a59" aria-label="Fioletowa"></button>
+					<button class="swatch" style="background:#3b82f6" data-primary="#3b82f6" data-secondary="#10b981"
+						data-accent="#f97316" aria-label="Niebieska"></button>
+					<button class="swatch" style="background:#16a34a" data-primary="#16a34a" data-secondary="#84cc16"
+						data-accent="#f59e0b" aria-label="Zielona"></button>
+					<button class="swatch" style="background:#d946ef" data-primary="#d946ef" data-secondary="#8b5cf6"
+						data-accent="#ec4899" aria-label="Różowa"></button>
+				</div>
+				<button class="btn btn-ghost" id="themeToggle" aria-label="Przełącz motyw"></button>
+				<button class="btn btn-primary">Kup Aurora Arc</button>
+			</div>
+		</div>
+	</header>
+
+	<main>
+		<section class="hero">
+			<div class="container hero-grid">
+				<div class="hero-card reveal">
+					<h2>Blog o energii słonecznej, designie i życiu w rytmie światła</h2>
+					<p>Jesteśmy Aurora Labs – tworzymy <strong>inteligentne banki energii solarnej</strong> i akcesoria,
+						które dbają o planetę i Twój komfort. Tu dzielimy się wiedzą, inspiracjami i kulisami naszych
+						projektów.</p>
+					<div class="cta">
+						<a href="#posts" class="btn btn-primary">Czytaj najnowsze</a>
+						<button class="btn btn-ghost" id="subscribeOpen">Zapisz się na newsletter</button>
+					</div>
+					<div class="stat">
+						<div class="dot" aria-hidden="true"></div>
+						<div><strong>+120&nbsp;tys.</strong> ładowań wykonanych Aurora Arc w 2025 r.</div>
+					</div>
+				</div>
+				<div class="glass reveal">
+					<div class="marquee" aria-label="Zaufali nam">
+						<div class="flow">
+							<span class="badge">🏕️ Outdoor Weekly</span>
+							<span class="badge">⚡ SolarNow</span>
+							<span class="badge">🌍 Eco Living</span>
+							<span class="badge">🚴‍♀️ Urban Riders</span>
+							<span class="badge">🛰️ Tiny Tech</span>
+							<span class="badge">🏕️ Outdoor Weekly</span>
+							<span class="badge">⚡ SolarNow</span>
+							<span class="badge">🌍 Eco Living</span>
+							<span class="badge">🚴‍♀️ Urban Riders</span>
+							<span class="badge">🛰️ Tiny Tech</span>
+						</div>
+					</div>
+					<p style="margin:12px 0 0;color:var(--muted);">„Aurora Arc to najmądrzejszy powerbank solarny, jaki
+						testowaliśmy.” — <em>Outdoor Weekly</em></p>
+				</div>
+			</div>
+		</section>
+
+		<div class="container content" id="posts">
+			<section class="posts">
+				<article class="card reveal" data-tags="poradnik,dom,oszczedzanie">
+					<div class="cover"><span class="tag">Poradnik</span></div>
+					<div class="body">
+						<h3 class="title">Jak ładować szybciej z paneli? 7 praktycznych trików</h3>
+						<p class="meta">12 paź 2025 • 6 min czytania • #panele #tips</p>
+						<p>Ustawianie pod kątem 35–45°, unikanie hotspotów i inteligentny dobór portów – proste kroki,
+							które skrócą czas ładowania o nawet 22%.</p>
+						<div class="actions">
+							<span class="chip">Efektywność</span>
+							<a class="btn btn-ghost" href="#">Czytaj →</a>
+						</div>
+					</div>
+				</article>
+
+				<article class="card reveal" data-tags="design,case-study,produkt">
+					<div class="cover"><span class="tag"
+							style="background: color-mix(in oklab, var(--bg) 90%, var(--accent));">Case study</span>
+					</div>
+					<div class="body">
+						<h3 class="title">Aurora Arc: od szkicu do prototypu z recyklingu</h3>
+						<p class="meta">02 paź 2025 • 8 min czytania • #design #prototype</p>
+						<p>Pokazujemy proces projektowania naszej flagowej ładowarki – materiały z recyklingu, testy w
+							terenie, kompromisy i lekcje na przyszłość.</p>
+						<div class="actions">
+							<span class="chip">Za kulisami</span>
+							<a class="btn btn-ghost" href="#">Czytaj →</a>
+						</div>
+					</div>
+				</article>
+
+				<article class="card reveal" data-tags="sprzet,recenzja,podroze">
+					<div class="cover"><span class="tag"
+							style="background: color-mix(in oklab, var(--bg) 90%, var(--secondary));">Recenzja</span>
+					</div>
+					<div class="body">
+						<h3 class="title">Top 5 kompaktowych paneli na weekendowy wypad</h3>
+						<p class="meta">20 wrz 2025 • 4 min czytania • #ranking #outdoor</p>
+						<p>Sprawdzamy wagę, składane zawiasy i realną wydajność. Zaskoczył nas model, który mieści się w
+							kieszeni plecaka.</p>
+						<div class="actions">
+							<span class="chip">Ranking</span>
+							<a class="btn btn-ghost" href="#">Czytaj →</a>
+						</div>
+					</div>
+				</article>
+
+				<article class="card reveal" data-tags="dom,technologie,nowosci">
+					<div class="cover"><span class="tag">Nowość</span></div>
+					<div class="body">
+						<h3 class="title">Zapowiedź: tryb „Słoneczna siesta” dla inteligentnego domu</h3>
+						<p class="meta">05 wrz 2025 • 3 min czytania • #smart-home</p>
+						<p>Automatyczne przełączanie urządzeń w porze największej produkcji energii. Integracja z Home
+							Assistant i skrótami w iOS.</p>
+						<div class="actions">
+							<span class="chip">Smart</span>
+							<a class="btn btn-ghost" href="#">Czytaj →</a>
+						</div>
+					</div>
+				</article>
+			</section>
+
+			<aside class="sidebar">
+				<div class="widget glass reveal">
+					<h3>Wyszukaj na blogu</h3>
+					<div class="search">
+						<input id="search" type="search" placeholder="Szukaj wpisów… (np. panele, dom)"
+							aria-label="Szukaj" />
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+							aria-hidden="true">
+							<path d="M10.5 18a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Zm0 0 7 7" stroke="currentColor"
+								stroke-width="1.5" stroke-linecap="round" />
+						</svg>
+					</div>
+					<p style="margin:10px 0 0;color:var(--muted);font-size:14px">Podpowiedź: możesz łączyć hasła, np.
+						„design, produkt”.</p>
+				</div>
+
+				<div class="widget glass reveal">
+					<h3>Filtruj po tagach</h3>
+					<div class="tags" id="tags">
+						<button type="button">poradnik</button>
+						<button type="button">design</button>
+						<button type="button">produkt</button>
+						<button type="button">recenzja</button>
+						<button type="button">dom</button>
+						<button type="button">outdoor</button>
+						<button type="button">technologie</button>
+					</div>
+				</div>
+
+				<div class="widget glass reveal">
+					<h3>Zapisz się na newsletter</h3>
+					<form class="newsletter" id="newsletterForm">
+						<input type="email" placeholder="Twój e-mail" required />
+						<button class="btn btn-primary" type="submit">Zapisz mnie</button>
+						<br>
+						<small style="color:var(--muted)">Bez spamu. Wypiszesz się jednym kliknięciem.</small>
+					</form>
+				</div>
+
+				<div class="widget glass reveal">
+					<h3>O nas</h3>
+					<p>W Aurora Labs łączymy energię słoneczną z pięknym wzornictwem. Nasz produkt <strong>Aurora
+							Arc</strong> to sprytny powerbank solarny z aplikacją i automatycznym dopasowaniem
+						ładowania.</p>
+				</div>
+			</aside>
+		</div>
+	</main>
+
+	<footer>
+		<div class="container">
+			© <span id="year"></span> Aurora Labs ·
+			<a href="#">Polityka prywatności</a> ·
+			<a href="https://github.com/SharixVent" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>
+				GitHub</a>
+			<a href="https://www.linkedin.com/in/dawkraw5/" target="_blank" rel="noopener"><i
+					class="fa-brands fa-linkedin"></i> LinkedIn</a>
+		</div>
+	</footer>
+
+	<button class="to-top" id="toTop" aria-label="Do góry">↑</button>
+
+	<dialog id="newsletterModal"
+		style="border:0;border-radius:20px;padding:0;box-shadow:0 30px 80px rgba(0,0,0,.35);max-width:560px;width:calc(100% - 24px);">
+		<div
+			style="padding:22px; background:var(--surface); color:var(--text); border:1px solid color-mix(in oklab, var(--muted) 15%, transparent); border-radius:20px;">
+			<h3 style="margin:0 0 8px; font:800 20px/1.2 Manrope, Inter, sans-serif;">Witamy w Aurora Labs ✨</h3>
+			<p style="margin:0 0 14px; color:var(--muted)">Dołącz do listy, aby jako pierwsza/y otrzymywać poradniki i
+				zniżki na Aurora Arc.</p>
+			<form class="newsletter" id="newsletterModalForm">
+				<input type="email" placeholder="Twój e-mail" required />
+					<button class="btn btn-primary" type="submit">Zapisz mnie</button>
+					<button class="btn btn-ghost" type="button" id="closeModal">Później</button>
+				</div>
+				<small style="color:var(--muted)">Obiecujemy – zero spamu.</small>
+			</form>
+		</div>
+	</dialog>
+
+	<script>
+		const $ = (sel, root = document) => root.querySelector(sel);
+		const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+		$('#year').textContent = new Date().getFullYear();
+
+		const root = document.documentElement;
+		const themeToggle = $('#themeToggle');
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const savedTheme = localStorage.getItem('theme');
+
+		function applyTheme(mode) {
+			root.classList.remove('is-dark', 'is-light');
+			if (mode === 'dark') {
+				root.classList.add('is-dark');
+				themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+			} else {
+				root.classList.add('is-light');
+				themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+			}
+		}
+
+		if (savedTheme) {
+			applyTheme(savedTheme);
+		} else {
+			applyTheme(prefersDark ? 'dark' : 'light');
+		}
+
+		themeToggle.addEventListener('click', () => {
+			const next = root.classList.contains('is-dark') ? 'light' : 'dark';
+			applyTheme(next);
+			localStorage.setItem('theme', next);
+		});
+
+		const palette = $('#palette');
+		const swatches = palette ? palette.querySelectorAll('.swatch') : [];
+		const savedColors = JSON.parse(localStorage.getItem('colors') || '{}');
+		if (savedColors.primary) {
+			root.style.setProperty('--primary', savedColors.primary);
+			root.style.setProperty('--secondary', savedColors.secondary);
+			root.style.setProperty('--accent', savedColors.accent);
+			swatches.forEach(b => { if (b.dataset.primary === savedColors.primary) b.classList.add('active'); });
+		} else {
+			swatches[0]?.classList.add('active');
+		}
+		swatches.forEach(btn => {
+			btn.addEventListener('click', () => {
+				swatches.forEach(b => b.classList.remove('active'));
+				btn.classList.add('active');
+				const colors = { primary: btn.dataset.primary, secondary: btn.dataset.secondary, accent: btn.dataset.accent };
+				Object.entries(colors).forEach(([k, v]) => root.style.setProperty(`--${k}`, v));
+				localStorage.setItem('colors', JSON.stringify(colors));
+			});
+		});
+
+		const progress = $('#progress');
+		const onScroll = () => {
+			const h = document.documentElement;
+			const scrollTop = h.scrollTop || document.body.scrollTop;
+			const height = h.scrollHeight - h.clientHeight;
+			const pct = Math.min(100, Math.max(0, (scrollTop / height) * 100));
+			progress.style.width = pct + '%';
+			const toTop = $('#toTop');
+			if (scrollTop > 500) toTop.classList.add('show'); else toTop.classList.remove('show');
+		};
+		document.addEventListener('scroll', onScroll, { passive: true });
+		onScroll();
+
+		$('#toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+		const io = new IntersectionObserver((entries) => {
+			entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+		}, { threshold: 0.14 });
+		$$('.reveal').forEach(el => io.observe(el));
+
+		const posts = $$('.card');
+		const search = $('#search');
+		const tagBar = $('#tags');
+		let activeTags = new Set();
+		function applyFilters() {
+			const q = (search?.value || '').toLowerCase().trim();
+			posts.forEach(card => {
+				const text = card.textContent.toLowerCase();
+				const tags = (card.getAttribute('data-tags') || '').split(',').map(s => s.trim());
+				const matchesQuery = !q || text.includes(q);
+				const matchesTags = activeTags.size === 0 || [...activeTags].every(t => tags.includes(t));
+				card.style.display = (matchesQuery && matchesTags) ? '' : 'none';
+			});
+		}
+		search?.addEventListener('input', applyFilters);
+		tagBar?.addEventListener('click', (e) => {
+			if (e.target.tagName !== 'BUTTON') return;
+			const tag = e.target.textContent.trim();
+			const pressed = e.target.getAttribute('aria-pressed') === 'true';
+			if (pressed) { activeTags.delete(tag); } else { activeTags.add(tag); }
+			e.target.setAttribute('aria-pressed', String(!pressed));
+			applyFilters();
+		});
+
+		const modal = $('#newsletterModal');
+		const subscribeOpen = $('#subscribeOpen');
+		const closeModal = $('#closeModal');
+		subscribeOpen?.addEventListener('click', () => modal.showModal());
+		closeModal?.addEventListener('click', () => modal.close());
+
+		function toast(msg, ok = true) {
+			const t = document.createElement('div');
+			t.textContent = msg;
+			t.style.position = 'fixed'; t.style.left = '50%'; t.style.bottom = '20px';
+			t.style.transform = 'translateX(-50%)'; t.style.padding = '12px 16px'; t.style.borderRadius = '12px';
+			t.style.color = '#fff'; t.style.background = ok ? 'var(--ok)' : 'var(--warn)';
+			t.style.boxShadow = '0 10px 25px rgba(0,0,0,.25)'; t.style.zIndex = '70';
+			document.body.appendChild(t); setTimeout(() => t.remove(), 2600);
+		}
+		function handleNewsletterSubmit(ev) {
+			ev.preventDefault();
+			const email = ev.target.querySelector('input[type=email]').value;
+			const valid = /.+@.+\..+/.test(email);
+			if (!valid) return toast('Podaj poprawny e-mail', false);
+			toast('Dziękujemy! Sprawdź skrzynkę ✉️');
+			try { modal.close(); } catch (_) { }
+			ev.target.reset();
+		}
+		$('#newsletterForm')?.addEventListener('submit', handleNewsletterSubmit);
+		$('#newsletterModalForm')?.addEventListener('submit', handleNewsletterSubmit);
+		modal?.addEventListener('click', (e) => { if (e.target === modal) modal.close(); });
+	</script>
+</body>
+
+</html>
